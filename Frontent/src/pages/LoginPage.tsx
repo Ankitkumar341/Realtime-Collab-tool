@@ -1,8 +1,5 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { LogIn, Mail, Lock } from 'lucide-react';
 
 const LoginPage = () => {
@@ -10,72 +7,74 @@ const LoginPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    //  login logic imeplementation 
+    // login logic implementation 
     console.log('Login submitted');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
-        <div className="text-center mb-8">
-          <LogIn className="h-12 w-12 text-primary mx-auto mb-4" />
-          <h1 className="text-2xl font-bold">Welcome back</h1>
-          <p className="text-gray-600 mt-2">Please sign in to your account</p>
+    <div className="min-vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div className="card shadow-lg p-4" style={{ width: '100%', maxWidth: '400px' }}>
+        <div className="text-center mb-4">
+          <LogIn className="h1 text-primary mb-3" />
+          <h2 className="h4 font-weight-bold">Welcome back</h2>
+          <p className="text-muted">Please sign in to your account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-              <Input
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email</label>
+            <div className="input-group">
+              <span className="input-group-text">
+                <Mail className="text-muted" />
+              </span>
+              <input
                 id="email"
                 placeholder="Enter your email"
                 type="email"
-                className="pl-10"
+                className="form-control"
                 required
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-              <Input
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <div className="input-group">
+              <span className="input-group-text">
+                <Lock className="text-muted" />
+              </span>
+              <input
                 id="password"
                 type="password"
                 placeholder="Enter your password"
-                className="pl-10"
+                className="form-control"
                 required
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
+          <div className="d-flex justify-content-between mb-3">
+            <div className="form-check">
               <input
                 type="checkbox"
                 id="remember"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                className="form-check-input"
               />
-              <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+              <label htmlFor="remember" className="form-check-label small text-muted">
                 Remember me
               </label>
             </div>
-            <a href="#" className="text-sm text-primary hover:underline">
-              Forgot password?
-            </a>
+            <a href="#" className="text-primary small">Forgot password?</a>
           </div>
 
-          <Button type="submit" className="w-full">
+          <button type="submit" className="btn btn-primary w-100">
             Sign in
-          </Button>
+          </button>
         </form>
 
-        <div className="mt-6 text-center text-sm">
-          <span className="text-gray-600">Don't have an account?</span>{' '}
-          <Link to="/signup" className="text-primary hover:underline font-semibold">
+        <div className="mt-4 text-center small">
+          <span className="text-muted">Don't have an account?</span>{' '}
+          <Link to="/signup" className="text-primary fw-semibold">
             Sign up
           </Link>
         </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FileEdit, Trash2, Share2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface NotepadCardProps {
   id: string;
@@ -26,44 +25,46 @@ const NotepadCard: React.FC<NotepadCardProps> = ({
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="bg-white rounded-lg shadow-lg p-4 border border-gray-200 hover:shadow-xl transition-shadow"
+      className="card shadow-sm border-light mb-3"
     >
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-gray-900 truncate">{title}</h3>
-        <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
+      <div className="card-body d-flex justify-content-between align-items-start">
+        <h5 className="card-title text-truncate" style={{ maxWidth: '80%' }}>
+          {title}
+        </h5>
+        <div>
+          <button
+            className="btn btn-link text-primary"
             onClick={() => onShare(id)}
-            className="text-blue-600 hover:text-blue-700"
+            aria-label="Share"
           >
             <Share2 className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
       </div>
-      
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3">{content}</p>
-      
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500">Last edited: {lastEdited}</span>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
+
+      <p className="card-text text-muted text-truncate" style={{ WebkitLineClamp: 3, overflow: 'hidden' }}>
+        {content}
+      </p>
+
+      <div className="card-footer d-flex justify-content-between align-items-center">
+        <small className="text-muted">Last edited: {lastEdited}</small>
+        <div className="d-flex gap-2">
+          <button
+            className="btn btn-outline-primary btn-sm"
             onClick={() => onEdit(id)}
-            className="text-blue-600 hover:text-blue-700"
+            aria-label="Edit"
           >
-            <FileEdit className="h-4 w-4 mr-1" />
+            <FileEdit className="h-4 w-4 me-1" />
             Edit
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
+          </button>
+          <button
+            className="btn btn-outline-danger btn-sm"
             onClick={() => onDelete(id)}
+            aria-label="Delete"
           >
-            <Trash2 className="h-4 w-4 mr-1" />
+            <Trash2 className="h-4 w-4 me-1" />
             Delete
-          </Button>
+          </button>
         </div>
       </div>
     </motion.div>

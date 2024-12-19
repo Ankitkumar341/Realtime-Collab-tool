@@ -13,6 +13,7 @@ function App() {
     <Router>
       <div className="d-flex flex-column min-vh-100">
         <Navbar />
+        
         <main className="flex-grow-1">
           <Routes>
             <Route path="/login" element={<LoginPage />} />

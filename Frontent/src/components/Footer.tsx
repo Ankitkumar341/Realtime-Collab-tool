@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-4 mb-4">
-            <h5 className="fw-bold mb-3">About Us</h5>
+            <h5 className="fw-bold mb-3 fs-2 ">About Us</h5>
             <p className="text-unmuted">
               Real Time Collab Tools
             </p>
@@ -15,17 +15,18 @@ const Footer = () => {
               <a href="#" className="text-light"><Facebook size={20} /></a>
               <a href="#" className="text-light"><Twitter size={20} /></a>
               <a href="#" className="text-light"><Instagram size={20} /></a>
-              <a href="#" className="text-light"><Linkedin size={20} /></a>
+              <a href="https://www.linkedin.com/in/ankitkumar341/" className="text-light"><Linkedin size={20} /></a>
             </div>
           </div>
 
           <div className="col-md-4 mb-4">
             <h5 className="fw-bold mb-3">Quick Links</h5>
-            <ul className="list-styled">
-              <li className="mb-2"><a href="/" className=" text-decoration-none">Home</a></li>
-              <li className="mb-2"><a href="/about" className=" text-decoration-none">About</a></li>
+            <ul className="list-styled  ">
+              <li className="mb-2"><a href="/" className=" text-decoration-none ">Home</a></li>
+              <li className="mb-2"><a href="/about" className=" text-decoration-none ">About</a></li>
               <li className="mb-2"><a href="/services" className=" text-decoration-none">Services</a></li>
               <li className="mb-2"><a href="/contact" className=" text-decoration-none">Contact</a></li>
+              
             </ul>
           </div>
 

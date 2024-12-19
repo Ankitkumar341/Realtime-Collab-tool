@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import NotepadCard from './NotepadCard';
 import NoteEditor from './NoteEditor';
 
@@ -86,24 +85,30 @@ const NotepadGrid: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">My Notes</h2>
-        <Button onClick={handleCreateNew} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="h-5 w-5 mr-2" />
+    <div className="container my-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="h4 text-dark">My Notes</h2>
+        <button 
+          onClick={handleCreateNew} 
+          className="btn btn-primary d-flex align-items-center">
+          <Plus className="h-5 w-5 me-2" />
           New Note
-        </Button>
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {notes.map(note => (
-          <NotepadCard
-            key={note.id}
-            {...note}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onShare={handleShare}
-          />
+          <div key={note.id} className="col">
+            <NotepadCard
+              id={note.id}
+              title={note.title}
+              content={note.content}
+              lastEdited={note.lastEdited}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onShare={handleShare}
+            />
+          </div>
         ))}
       </div>
     </div>
