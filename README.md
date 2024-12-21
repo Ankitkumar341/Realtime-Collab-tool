@@ -18,7 +18,11 @@ Realtime-Collab-tool is a web application that allows users to create, edit, and
 - Vite
 - react-toggle-dark-mode
 
+## Screen Shots 
+![Screenshot 2024-12-21 174544](https://github.com/user-attachments/assets/f2681fe2-0667-4639-b718-651921edadd5)
+
 ## Installation
+
 
 1. **Clone the repository:**
     ```sh
