@@ -3,6 +3,7 @@ import { Note } from '@/types/note';
 
 export const useNotes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const token = JSON.parse(localStorage.getItem('user') || '{}').token;
 
   useEffect(() => {
     fetchNotes();
@@ -10,7 +11,11 @@ export const useNotes = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/notes');
+      const response = await fetch('http://localhost:5000/api/notes', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
       setNotes(data);
     } catch (error) {
@@ -26,6 +31,7 @@ export const useNotes = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newNote),
       });
@@ -42,6 +48,7 @@ export const useNotes = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ title, content }),
       });
@@ -56,6 +63,9 @@ export const useNotes = () => {
     try {
       await fetch(`http://localhost:5000/api/notes/${id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       setNotes(notes.filter(note => note.id !== id));
     } catch (error) {
