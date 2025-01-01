@@ -32,11 +32,17 @@ Realtime-Collab-tool is a web application that allows users to create, edit, and
 
 2. **Install dependencies:**
     ```sh
+    cd backend
     npm install
     ```
-
 3. **Run the development server:**
     ```sh
+    copy .env.example .env
+    ```
+
+4. **Run the development server:**
+    ```sh
+    cd frontend
     npm run dev
     ```
 
