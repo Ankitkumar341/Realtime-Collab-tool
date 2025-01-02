@@ -1,116 +1,138 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import NotepadCard from './NotepadCard';
 import NoteEditor from './NoteEditor';
+import socket from '../../utils/socket';
 
 interface Note {
-  id: string;
+  _id: string;
   title: string;
   content: string;
   lastEdited: string;
 }
 
 const NotepadGrid: React.FC = () => {
-  const [notes, setNotes] = useState<Note[]>([
-    {
-      id: '1',
-      title: 'Welcome Note',
-      content: 'Welcome to your collaborative notepad! Start creating and sharing notes with your team.',
-      lastEdited: 'Just now'
-    },
-    {
-      id: '2',
-      title: 'Getting Started',
-      content: '1. Create a new note\n2. Share with teammates\n3. Edit in real-time\n4. Save your changes',
-      lastEdited: '5 mins ago'
-    }
-  ]);
-
+  const [notes, setNotes] = useState<Note[]>([]);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleEdit = (id: string) => {
-    const note = notes.find(n => n.id === id);
-    if (note) {
-      setEditingNote(note);
+  const fetchNotes = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:5000/api/notes', {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem('user') || '{}').token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch notes');
+      }
+      const data = await response.json();
+      setNotes(data);
+    } catch (error) {
+      console.error('Error fetching notes:', error);
+      setError('Failed to load notes');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleDelete = (id: string) => {
-    setNotes(notes.filter(note => note.id !== id));
-  };
+  useEffect(() => {
+    fetchNotes();
 
-  const handleShare = (id: string) => {
-    // Implement sharing functionality
-    console.log('Sharing note:', id);
-  };
+    socket.on('note:created', (note: Note) => {
+      setNotes((prev) => [note, ...prev]);
+    });
 
-  const handleCreateNew = () => {
-    setIsCreatingNew(true);
-  };
+    socket.on('note:updated', (updatedNote: Note) => {
+      setNotes((prev) =>
+        prev.map((note) => (note._id === updatedNote._id ? updatedNote : note))
+      );
+    });
 
-  const handleSave = (title: string, content: string) => {
-    if (editingNote) {
-      setNotes(notes.map(note => 
-        note.id === editingNote.id 
-          ? { ...note, title, content, lastEdited: 'Just now' }
-          : note
-      ));
-      setEditingNote(null);
-    } else {
-      const newNote: Note = {
-        id: Date.now().toString(),
-        title,
-        content,
-        lastEdited: 'Just now'
-      };
-      setNotes([newNote, ...notes]);
-      setIsCreatingNew(false);
-    }
-  };
+    socket.on('note:deleted', (noteId: string) => {
+      setNotes((prev) => prev.filter((note) => note._id !== noteId));
+    });
 
-  if (editingNote || isCreatingNew) {
-    return (
-      <NoteEditor
-        noteId={editingNote?.id}
-        initialTitle={editingNote?.title}
-        initialContent={editingNote?.content}
-        onSave={handleSave}
-        onClose={() => {
-          setEditingNote(null);
-          setIsCreatingNew(false);
-        }}
-      />
-    );
+    return () => {
+      socket.off('note:created');
+      socket.off('note:updated');
+      socket.off('note:deleted');
+    };
+  }, []);
+
+  if (loading) {
+    return <div className="container my-4">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="container my-4">Error: {error}</div>;
   }
 
   return (
     <div className="container my-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="h4 text-dark">My Notes</h2>
-        <button 
-          onClick={handleCreateNew} 
-          className="btn btn-primary d-flex align-items-center">
+        <button
+          onClick={() => setIsCreatingNew(true)}
+          className="btn btn-primary d-flex align-items-center"
+        >
           <Plus className="h-5 w-5 me-2" />
           New Note
         </button>
       </div>
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {notes.map(note => (
-          <div key={note.id} className="col">
+        {notes.map((note) => (
+          <div key={note._id} className="col">
             <NotepadCard
-              id={note.id}
+              id={note._id}
               title={note.title}
               content={note.content}
               lastEdited={note.lastEdited}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onShare={handleShare}
+              onEdit={(id) => {
+                const noteToEdit = notes.find((n) => n._id === id);
+                if (noteToEdit) {
+                  setEditingNote(noteToEdit);
+                }
+              }}
+              onDelete={(id) => {
+                socket.emit('note:delete', id);
+                setNotes((prev) => prev.filter((note) => note._id !== id));
+              }}
+              onShare={() => {}}
             />
           </div>
         ))}
       </div>
+
+      {(editingNote || isCreatingNew) && (
+        <NoteEditor
+          noteId={editingNote?.id}
+          initialTitle={editingNote?.title}
+          initialContent={editingNote?.content}
+          onSave={async (title, content) => {
+            if (editingNote) {
+              socket.emit('note:update', { ...editingNote, title, content });
+            } else {
+              socket.emit('note:create', {
+                id: Date.now().toString(),
+                title,
+                content,
+                lastEdited: new Date().toISOString(),
+              });
+            }
+            setEditingNote(null);
+            setIsCreatingNew(false);
+          }}
+          onClose={() => {
+            setEditingNote(null);
+            setIsCreatingNew(false);
+          }}
+        />
+      )}
     </div>
   );
 };
