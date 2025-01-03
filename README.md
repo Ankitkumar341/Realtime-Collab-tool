@@ -6,7 +6,6 @@ Realtime-Collab-tool is a web application that allows users to create, edit, and
 ## Features
 - User authentication (Sign Up, Login)
 - Real-time collaborative notepad
-- Dark mode and light mode toggle
 - Responsive design using Bootstrap and Tailwind CSS
 
 ## Technologies Used
@@ -16,10 +15,9 @@ Realtime-Collab-tool is a web application that allows users to create, edit, and
 - Tailwind CSS
 - Lucide React
 - Vite
-- react-toggle-dark-mode
 
 ## Screen Shots 
-![Screenshot 2024-12-21 174544](https://github.com/user-attachments/assets/f2681fe2-0667-4639-b718-651921edadd5)
+![Screenshot 2024-12-21 174538](https://github.com/user-attachments/assets/86e8fa84-4b20-4975-91e0-1d206b6b3f52)
 
 ## Installation
 
@@ -47,17 +45,19 @@ Realtime-Collab-tool is a web application that allows users to create, edit, and
     ```
 
 
-## Usage
-
 1. **Start the development server:**
     ```sh
     npm run dev
     ```
 
-2. **Open your browser and navigate to:**
+2. **Open your browser port no**
     ```
-    http://localhost:5173
+    http://localhost:5173 user1
+    http://localhost:5174 user2
+    
     ```
+- if you want more user update the regions unless you got CORS error and can't add in data base .
+## Usage
 
 
 
