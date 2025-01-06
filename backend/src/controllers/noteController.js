@@ -1,10 +1,10 @@
 const Note = require('../models/noteModel');
 const io = require('../server'); // Import the io instance
 
-// Get all notes
+// Get all notes for a user
 const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find();
+    const notes = await Note.find({ owner: req.user._id });
     res.json(notes);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -13,11 +13,11 @@ const getNotes = async (req, res) => {
 
 // Create a new note
 const createNote = async (req, res) => {
-  const { title, content, owner } = req.body;
+  const { title, content } = req.body;
   const newNote = new Note({
     title,
     content,
-    owner,
+    owner: req.user._id,
   });
 
   try {
@@ -35,11 +35,16 @@ const updateNote = async (req, res) => {
   const { title, content } = req.body;
 
   try {
-    const updatedNote = await Note.findByIdAndUpdate(
-      id,
-      { title, content, lastEdited: Date.now() },
-      { new: true }
-    );
+    const note = await Note.findOne({ _id: id, owner: req.user._id });
+    if (!note) {
+      return res.status(404).json({ message: 'Note not found' });
+    }
+
+    note.title = title;
+    note.content = content;
+    note.lastEdited = Date.now();
+
+    const updatedNote = await note.save();
     io.emit('note:updated', updatedNote); // Emit event
     res.json(updatedNote);
   } catch (error) {
@@ -52,7 +57,11 @@ const deleteNote = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Note.findByIdAndDelete(id);
+    const note = await Note.findOneAndDelete({ _id: id, owner: req.user._id });
+    if (!note) {
+      return res.status(404).json({ message: 'Note not found' });
+    }
+
     io.emit('note:deleted', id); // Emit event
     res.json({ message: 'Note deleted' });
   } catch (error) {

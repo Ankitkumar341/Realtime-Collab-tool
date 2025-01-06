@@ -1,4 +1,4 @@
-﻿# Realtime-Collab-tool
+﻿﻿# Realtime-Collab-tool
 
 ## Description
 Realtime-Collab-tool is a web application that allows users to create, edit, and share notes in real-time with their team. It features a user-friendly interface, authentication, and a collaborative notepad.
@@ -17,7 +17,7 @@ Realtime-Collab-tool is a web application that allows users to create, edit, and
 - Vite
 
 ## Screen Shots 
-![Screenshot 2024-12-21 174538](https://github.com/user-attachments/assets/86e8fa84-4b20-4975-91e0-1d206b6b3f52)
+0a84-4b20-4975-91e0-1d206b6b3f52)
 
 ## Installation
 
