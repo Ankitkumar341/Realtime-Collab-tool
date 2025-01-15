@@ -110,7 +110,7 @@ const NotepadGrid: React.FC = () => {
 
       {(editingNote || isCreatingNew) && (
         <NoteEditor
-          noteId={editingNote?._id}
+          noteId={editingNote?.id}
           initialTitle={editingNote?.title}
           initialContent={editingNote?.content}
           onSave={async (title, content) => {
@@ -118,7 +118,7 @@ const NotepadGrid: React.FC = () => {
               socket.emit('note:update', { ...editingNote, title, content });
             } else {
               socket.emit('note:create', {
-                _id: Date.now().toString(),
+                id: Date.now().toString(),
                 title,
                 content,
                 lastEdited: new Date().toISOString(),
